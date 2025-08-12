@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treino CAVEIRA PRF</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter & Keania One -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Keania+One&display=swap" rel="stylesheet">
+
+    <!-- Configuração do Tema e PWA -->
+    <meta name="theme-color" content="#1f2937">
+    <meta name="description" content="App de acompanhamento do treino CAVEIRA PRF.">
+
+    <style>
+        /* Estilização base com a fonte Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Remove o highlight azul ao tocar em links/botões no mobile */
+            background-color: #111827; /* Cor de fundo base (gray-900) */
+        }
+
+        /* Classe para a fonte Keania One */
+        .font-keania {
+            font-family: 'Keania One', sans-serif;
+        }
+
+        /* Estilização customizada para o checkbox */
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            height: 1.5rem;
+            width: 1.5rem;
+            min-width: 1.5rem;
+            background-color: #374151; /* gray-700 */
+            border: 2px solid #4b5563; /* gray-600 */
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .custom-checkbox:checked {
+            background-color: #3b82f6; /* blue-500 */
+            border-color: #2563eb; /* blue-600 */
+        }
+
+        .custom-checkbox:checked::before {
+            content: '✔';
+            color: white;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* Animação de fade-in para o conteúdo do treino */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-gray-200 antialiased relative min-h-screen overflow-x-hidden">
+
+    <!-- Conteúdo principal -->
+    <div class="relative z-10 container mx-auto px-4 py-8">
+        <header id="home-btn" class="text-center mb-8 cursor-pointer group">
+            <h1 class="text-5xl font-keania tracking-wider uppercase transition-transform duration-300 group-hover:scale-105" style="color: #ffd900;">CAVEIRA PRF</h1>
+            <p class="text-blue-400 font-medium transition-colors duration-300 group-hover:text-blue-300">Plano de Treinamento de Elite</p>
+        </header>
+
+        <!-- Menu de Navegação -->
+        <nav class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+            <button data-day="segunda" class="day-btn bg-gray-800 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Segunda</button>
+            <button data-day="quarta" class="day-btn bg-gray-800 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Quarta</button>
+            <button data-day="sexta" class="day-btn bg-gray-800 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Sexta</button>
+            <button data-day="sabado" class="day-btn bg-gray-800 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Sábado</button>
+        </nav>
+
+        <!-- Container para os detalhes do treino -->
+        <main id="workout-details" class="w-full max-w-3xl mx-auto">
+             <!-- O conteúdo inicial é inserido aqui via JS -->
+        </main>
+    </div>
+
+    <script>
+        // --- DADOS DO TREINO ---
+        const workoutData = {
+            segunda: {
+                title: 'Costas + Barra + Core',
+                objective: 'Força de puxada e resistência para barra fixa.',
+                sections: [
+                    { title: 'Aquecimento', items: [
+                        { name: '5 min corda', details: '' },
+                        { name: 'Mobilidade de ombros e escápulas', details: '2 min' },
+                    ]},
+                    { title: 'Barra fixa (foco técnico)', items: [
+                        { name: 'Isometria no topo', details: '3x até falhar' },
+                        { name: 'Excêntrica lenta', details: '4x 5 repetições' },
+                        { name: 'Barra com elástico', details: '3x 8-10 repetições' },
+                    ]},
+                    { title: 'Força de puxada', items: [
+                        { name: 'Puxada na polia alta (pegada pronada)', details: '4x 10' },
+                        { name: 'Remada curvada ou baixa', details: '4x 10' },
+                        { name: 'Face pull', details: '3x 12-15 (estabilidade escapular)' },
+                    ]},
+                    { title: 'Core e lombar', items: [
+                        { name: 'Prancha frontal', details: '3x 45 seg' },
+                        { name: 'Prancha lateral', details: '3x 30 seg cada lado' },
+                        { name: 'Extensão lombar', details: '3x 12' },
+                    ]}
+                ]
+            },
+            quarta: {
+                title: 'Pernas + Potência',
+                objective: 'Explosão para corrida e saltos do TAF.',
+                sections: [
+                    { title: 'Aquecimento', items: [
+                        { name: '5 min corrida leve', details: '' },
+                        { name: 'Mobilidade de quadril e tornozelo', details: '' },
+                    ]},
+                    { title: 'Força de perna', items: [
+                        { name: 'Agachamento livre', details: '4x 8-10' },
+                        { name: 'Avanço com halter', details: '3x 10 cada perna' },
+                        { name: 'Levantamento terra romeno', details: '3x 8-10' },
+                    ]},
+                    { title: 'Pliometria e corrida curta', items: [
+                        { name: 'Saltos no caixote', details: '3x 8' },
+                        { name: 'Sprint 30m', details: '5x (recuperar 1 min)' },
+                    ]},
+                    { title: 'Core', items: [
+                        { name: 'Abdominal prancha com toque no ombro', details: '3x 12 cada lado' },
+                        { name: 'Abdominal oblíquo', details: '3x 15 cada lado' },
+                    ]}
+                ]
+            },
+            sexta: {
+                title: 'Peito, Tríceps + Barra auxiliar',
+                objective: 'Empurrar forte e ajudar na estabilidade da barra.',
+                sections: [
+                    { title: 'Aquecimento', items: [
+                        { name: '5 min corrida leve', details: '' },
+                        { name: 'Mobilidade de ombros', details: '' },
+                    ]},
+                    { title: 'Força de empurrar', items: [
+                        { name: 'Supino reto', details: '4x 8-10' },
+                        { name: 'Supino inclinado', details: '3x 10' },
+                        { name: 'Mergulho nas paralelas ou banco', details: '3x 8-12' },
+                    ]},
+                    { title: 'Complemento para barra', items: [
+                        { name: 'Chin-up (pegada supinada) com elástico', details: '3x 6-8' },
+                        { name: 'Pullover com halter', details: '3x 12' },
+                        { name: 'Rosca direta barra ou halter', details: '3x 10-12' },
+                    ]},
+                    { title: 'Core', items: [
+                        { name: 'Elevação de pernas suspenso', details: '3x 10-12' },
+                        { name: 'Abdominal infra no banco', details: '3x 15' },
+                    ]}
+                ]
+            },
+            sabado: {
+                title: 'Corrida',
+                objective: 'Melhorar tempo no 3 km.',
+                sections: [
+                    { title: 'Aquecimento', items: [
+                        { name: '5 min corrida leve', details: '' },
+                        { name: 'Alongamento dinâmico', details: '' },
+                    ]},
+                    { title: 'Treino', items: [
+                        { name: 'Semana 1-4', details: 'Intervalado (8x 400m forte / 200m leve)' },
+                        { name: 'Semana 5-8', details: 'Progressivo (3 km aumentando intensidade a cada km)' },
+                        { name: 'Semana 9+', details: 'Simulação de prova (3 km no máximo)' },
+                    ]},
+                    { title: 'Final', items: [
+                        { name: 'Caminhada leve 5 min', details: '' },
+                        { name: 'Alongamento posterior de perna, quadril e panturrilha', details: '' },
+                    ]}
+                ]
+            }
+        };
+
+        // --- LÓGICA DA APLICAÇÃO ---
+        const workoutContainer = document.getElementById('workout-details');
+        const dayButtons = document.querySelectorAll('.day-btn');
+        const homeBtn = document.getElementById('home-btn');
+        let currentDay = null;
+
+        const welcomeHTML = `
+            <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-xl text-center shadow-lg border border-gray-700 fade-in">
+                <h2 class="text-2xl font-bold text-white mb-2">Bem-vindo, futuro PRF!</h2>
+                <p class="text-gray-300">Selecione um dia de treino acima para começar sua jornada. A disciplina é a ponte entre metas e realizações.</p>
+            </div>`;
+
+        function resetToHomeView() {
+            workoutContainer.innerHTML = welcomeHTML;
+            dayButtons.forEach(btn => btn.classList.remove('bg-blue-600', 'ring-2', 'ring-blue-400'));
+            currentDay = null;
+        }
+
+        homeBtn.addEventListener('click', resetToHomeView);
+
+        function loadState() {
+            if (!currentDay) return;
+            const checkboxes = workoutContainer.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const isChecked = localStorage.getItem(checkbox.id) === 'true';
+                checkbox.checked = isChecked;
+            });
+        }
+
+        function saveState(id, isChecked) {
+            localStorage.setItem(id, isChecked);
+        }
+
+        function displayWorkout(day) {
+            currentDay = day;
+            const data = workoutData[day];
+            if (!data) return;
+
+            workoutContainer.innerHTML = '';
+            
+            const card = document.createElement('div');
+            card.className = 'bg-gray-800/50 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-2xl border border-gray-700/50 fade-in';
+            
+            let contentHTML = `
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold text-white">${data.title}</h2>
+                    <p class="text-blue-400 mt-1">${data.objective}</p>
+                </div>
+                <div class="space-y-6">
+            `;
+
+            data.sections.forEach((section, sectionIndex) => {
+                contentHTML += `
+                    <div>
+                        <h3 class="text-xl font-semibold text-white border-b-2 border-blue-500 pb-2 mb-4">${section.title}</h3>
+                        <ul class="space-y-3">
+                `;
+                section.items.forEach((item, itemIndex) => {
+                    const checkboxId = `chk-${day}-${sectionIndex}-${itemIndex}`;
+                    contentHTML += `
+                        <li class="flex items-center gap-4 p-2 rounded-md transition-colors duration-200 hover:bg-gray-700/50">
+                            <input type="checkbox" id="${checkboxId}" class="custom-checkbox">
+                            <label for="${checkboxId}" class="flex-grow cursor-pointer">
+                                <span class="font-medium text-gray-100">${item.name}</span>
+                                ${item.details ? `<span class="block text-sm text-gray-400">${item.details}</span>` : ''}
+                            </label>
+                        </li>
+                    `;
+                });
+                contentHTML += `</ul></div>`;
+            });
+
+            contentHTML += `</div>`;
+            card.innerHTML = contentHTML;
+            workoutContainer.appendChild(card);
+
+            const checkboxes = workoutContainer.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    saveState(e.target.id, e.target.checked);
+                });
+            });
+
+            loadState();
+        }
+
+        dayButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                dayButtons.forEach(btn => btn.classList.remove('bg-blue-600', 'ring-2', 'ring-blue-400'));
+                button.classList.add('bg-blue-600', 'ring-2', 'ring-blue-400');
+                
+                const day = button.getAttribute('data-day');
+                displayWorkout(day);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            resetToHomeView();
+
+            const manifest = {
+                "name": "Treino CAVEIRA PRF",
+                "short_name": "Caveira PRF",
+                "start_url": ".",
+                "display": "standalone",
+                "background_color": "#111827",
+                "theme_color": "#1f2937",
+                "description": "App de acompanhamento do treino CAVEIRA PRF.",
+                "icons": [
+                    {
+                        "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjZmZkOTAwIj48cGF0aCBkPSJNMTI4LDI0QTExMiwxMTIsMCwwLDAsMTYsMTM2djY0YTgsOCwwLDAsMCw4LDhoMTY4YTgsOCwwLDAsMCw4LTh2LTY0QTExMiwxMTIsMCwwLDAsMTI4LDI0Wm0wLDIwMGE5Niw5NiwwLDAsMS05Ni05NnYtMTZoMTkyVjEzNkE5Niw5NiwwLDAsMSwxMjgsMjI0Wk0xNjgsMTI4YTE2LDE2LDAsMSwxLTE2LTE2QTE2LDE2LDAsMCwxLDE2OCwxMjhabS04MCwwYTE2LDE2LDAsMSwxLTE2LTE2QTE2LDE2LDAsMCwxLDg4LDEyOFoiLz48L3N2Zz4=",
+                        "sizes": "192x192",
+                        "type": "image/svg+xml",
+                        "purpose": "any maskable"
+                    },
+                    {
+                        "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiBmaWxsPSIjZmZkOTAwIj48cGF0aCBkPSJNMTI4LDI0QTExMiwxMTIsMCwwLDAsMTYsMTM2djY0YTgsOCwwLDAsMCw4LDhoMTY4YTgsOCwwLDAsMCw4LTh2LTY0QTExMiwxMTIsMCwwLDAsMTI4LDI0Wm0wLDIwMGE5Niw5NiwwLDAsMS05Ni05NnYtMTZoMTkyVjEzNkE5Niw5NiwwLDAsMSwxMjgsMjI0Wk0xNjgsMTI4YTE2LDE2LDAsMSwxLTE2LTE2QTE2LDE2LDAsMCwxLDE2OCwxMjhabS04MCwwYTE2LDE2LDAsMSwxLTE2LTE2QTE2LDE2LDAsMCwxLDg4LDEyOFoiLz48L3N2Zz4=",
+                        "sizes": "512x512",
+                        "type": "image/svg+xml",
+                        "purpose": "any maskable"
+                    }
+                ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestUrl;
+            document.head.appendChild(link);
+
+            if ('serviceWorker' in navigator) {
+                const swContent = `
+                    const CACHE_NAME = 'caveira-prf-cache-v5';
+                    const assetsToCache = ['/', 'index.html'];
+                    self.addEventListener('install', e => e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(assetsToCache))));
+                    self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
+                `;
+                const swBlob = new Blob([swContent], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swUrl).then(reg => console.log('SW Registrado!')).catch(err => console.error('Erro no SW', err));
+            }
+        });
+    </script>
+</body>
+</html>
